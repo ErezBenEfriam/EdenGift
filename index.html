@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Slider</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: lightblue;
+        }
+
+        /* body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: lightblue;
+        } */
+
+        .slider-container {
+            position: relative;
+            width: 90%;
+            max-width: 600px;
+            overflow: hidden;
+            /* Hide overflow */
+        }
+
+        .slider {
+            display: flex;
+            /* Use flexbox for sliding effect */
+            transition: transform 0.5s ease;
+            /* Smooth transition for sliding */
+            position: relative;
+            width: 100%;
+            /* Ensures the slider takes full width */
+        }
+
+        .slider img {
+            width: 100%;
+            /* Images take full width of slider */
+            flex-shrink: 0;
+            /* Prevents images from shrinking */
+        }
+
+        .controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+
+        .controls button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .controls button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        @media only screen and (max-width: 600px) {
+            .controls button {
+                padding: 8px;
+            }
+        }
+
+
+
+
+        /* Balloons styling */
+        .balloon {
+            position: absolute;
+            bottom: -150px;
+            width: 50px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: red;
+            box-shadow: inset -5px 5px 10px rgba(0, 0, 0, 0.1);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        /* Balloons floating up */
+        @keyframes float {
+            0% {
+                transform: translateY(100vh);
+            }
+
+            100% {
+                transform: translateY(-100vh);
+            }
+        }
+
+        /* Confetti styling */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: yellow;
+            opacity: 0.8;
+            animation: fall 4s linear infinite;
+        }
+
+        /* Confetti falling */
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh);
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div class="balloons-container"></div> -->
+
+    <div id="confetti-container"></div>
+    <div class="balloons-container">
+        <h1 style="
+        font-family: 'Poppins', sans-serif;
+        font-size: 48px;
+        color: white;
+        background: linear-gradient(90deg, #ff7e5f, #feb47b);
+        text-align: center;
+        padding: 20px;
+        border-radius: 10px;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    ">
+            יום הולדת 25 שמח עדן </h1>
+        <div style="margin: 0 auto;" class="slider-container">
+
+            <div class="slider" id="slider">
+                <!-- Images will be loaded dynamically by JavaScript -->
+            </div>
+            <div class="controls">
+                <button id="prevBtn">&#10094; Prev</button>
+                <button id="nextBtn">Next &#10095;</button>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+        // Initialize variables
+        const slider = document.getElementById('slider');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentIndex = 0;
+        let images = [];
+
+        // Load images dynamically
+        function loadImages(index) {
+            const img = new Image();
+            img.src = `images/Image${index}.jpg`; // Updated path to images folder
+            img.onload = function () {
+                slider.appendChild(img);
+                images.push(img);
+                loadImages(index + 1); // Load next image
+            };
+            img.onerror = function () {
+                if (images.length === 0) {
+                    alert('No images found!');
+                }
+                showImage(currentIndex); // Show first image if available
+            };
+        }
+
+        // Show the current image
+        function showImage(index) {
+            // Calculate translateX value based on currentIndex
+            const translateX = -index * 100; // Move slider left by 100% for each index
+            slider.style.transform = `translateX(${translateX}%)`; // Apply translation
+        }
+
+        // Navigate to the previous image
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            showImage(currentIndex);
+        }
+
+        // Navigate to the next image
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            showImage(currentIndex);
+        }
+
+        // Event listeners for buttons
+        prevBtn.addEventListener('click', prevImage);
+        nextBtn.addEventListener('click', nextImage);
+
+        // Load the first image on page load
+        window.onload = () => loadImages(1);
+
+
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add Balloons
+            const balloonColors = ['red', 'blue', 'green', 'purple', 'orange'];
+            for (let i = 0; i < 10; i++) {
+                let balloon = document.createElement('div');
+                balloon.classList.add('balloon');
+                balloon.style.backgroundColor = balloonColors[i % balloonColors.length];
+                balloon.style.left = Math.random() * 100 + 'vw';
+                balloon.style.animationDuration = Math.random() * 3 + 7 + 's'; // Vary speed
+                document.querySelector('.balloons-container').appendChild(balloon);
+            }
+
+            // Add Confetti
+            const confettiColors = ['yellow', 'red', 'blue', 'green', 'pink', 'purple'];
+            for (let i = 0; i < 100; i++) {
+                let confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.backgroundColor = confettiColors[i % confettiColors.length];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDuration = Math.random() * 2 + 2 + 's'; // Vary speed
+                document.getElementById('confetti-container').appendChild(confetti);
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
