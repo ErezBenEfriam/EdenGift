@@ -122,7 +122,72 @@
                 transform: translateY(100vh) rotate(360deg);
             }
         }
+        /* Flip container */
+        .flip-container {
+            perspective: 1000px; /* Enable 3D flip */
+            width: 300px;
+            margin: 50px auto;
+        }
+
+        /* Flip animation for both sides */
+        .flip-card {
+            width: 100%;
+            height: 150px;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        /* Flip on click */
+        .flipped {
+            transform: rotateY(180deg);
+        }
+
+        /* Front side (H1 element) */
+        .front {
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            font-family: 'Poppins', sans-serif;
+            font-size: 48px;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            backface-visibility: hidden; /* Hide back face during flip */
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Back side (Hidden content) */
+        .back {
+            background-color: #6a82fb;
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            backface-visibility: hidden;
+            transform: rotateY(180deg);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
     </style>
+
+
+
 </head>
 
 <body>
@@ -130,18 +195,33 @@
 
     <div id="confetti-container"></div>
     <div class="balloons-container">
-        <h1 style="
-        font-family: 'Poppins', sans-serif;
-        font-size: 48px;
-        color: white;
-        background: linear-gradient(90deg, #ff7e5f, #feb47b);
-        text-align: center;
-        padding: 20px;
-        border-radius: 10px;
-        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    ">
-            יום הולדת 25 שמח עדן </h1>
+
+        <div stlye="margin: 0 auto" class="flip-container" id="flipCard">
+            <!-- Flip card front (H1) -->
+            <div style="margin-top: 400px;" 
+    class="flip-card">
+                <div class="front">
+                    יום הולדת 25 שמח עדן
+                </div>
+                <div class="back">
+
+                    <div>
+                        אני אוהב אותך הכי בעולם!
+                        אני מאחל לך שתחייכי ותצחקי מלא,
+                        שתגשמי את כל המטרות שלך ומעבר
+                        שתמיד תהי לידי בעליות ובירידות
+                        ולעוד הרבה ימי הולדת יחד
+                        דני\דן דן\דונצ'יץ\סוריקטה\ירח
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
         <div style="margin: 0 auto;" class="slider-container">
 
             <div class="slider" id="slider">
@@ -151,16 +231,56 @@
                 <button id="prevBtn">&#10094; Prev</button>
                 <button id="nextBtn">Next &#10095;</button>
             </div>
+         
         </div>
 
+
+        <div style="
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        font-family: 'Montserrat', sans-serif;
+        margin-top: 100px; /* Add space above the div */
+    ">
+
+            <p dir="rtl" style="
+            font-size: 20px;
+            color: #333;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        ">
+                טוב אז לא בדיוק הקמתי
+                הוצאת ספרים אבל אתר זה גם משהו לא?
+            </p>
+
+
+
+            <p dir="rtl" style="
+            font-size: 20px;
+            color: #333;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        ">ניסתי להקים אבל אמרו שזה לא עובד ככה, מסתבר אי אפשר להקים פשוט הוצאת ספרים למישהי רק כי את אוהב אותה</p>
+
+            <p style="font-size: 20px; font-size: 20px; color: #333; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        ">אבל היי אתר זה גם נחמד</p>
+
+
+            <p style="font-size: 20px; font-size: 20px; color: #333; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        ">אני גם מכיר את המפתח אפשר אולי לבקש ממנו להוסיף עוד תמונות או פיצ'רים וזה</p>
+        </div>
 
     </div>
 
     <script>
+        // Flip card on click
+        document.getElementById("flipCard").addEventListener("click", function () {
+            this.querySelector(".flip-card").classList.toggle("flipped");
+        });
         // Initialize variables
         const slider = document.getElementById('slider');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
+   
         let currentIndex = 0;
         let images = [];
 
@@ -179,7 +299,12 @@
                 }
                 showImage(currentIndex); // Show first image if available
             };
+           
+
         }
+
+
+       
 
         // Show the current image
         function showImage(index) {
@@ -199,17 +324,17 @@
             currentIndex = (currentIndex + 1) % images.length;
             showImage(currentIndex);
         }
-
+      
         // Event listeners for buttons
         prevBtn.addEventListener('click', prevImage);
         nextBtn.addEventListener('click', nextImage);
-
         // Load the first image on page load
-        window.onload = () => loadImages(1);
-
-
-
-
+       /* window.onload = () => loadImages(1);*/
+        window.onload = () => {
+            loadImages(1);
+            
+        };
+     
         document.addEventListener('DOMContentLoaded', function () {
             // Add Balloons
             const balloonColors = ['red', 'blue', 'green', 'purple', 'orange'];
