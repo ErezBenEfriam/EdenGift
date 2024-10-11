@@ -183,6 +183,10 @@
             justify-content: center;
             align-items: center;
         }
+        #toggleButton {
+            font-size: 24px;
+            cursor: pointer;
+        }
 
     </style>
 
@@ -196,16 +200,23 @@
     <div id="confetti-container"></div>
     <div class="balloons-container">
 
+        <audio id="audioPlayer" >
+            <source src="DieWithASmile.mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+
+
         <div stlye="margin: 0 auto" class="flip-container" id="flipCard">
+           
             <!-- Flip card front (H1) -->
-            <div style="margin-top: 600px;" 
-    class="flip-card">
+            <div style="margin-top: 600px;"
+                 class="flip-card">
                 <div class="front">
                     יום הולדת 25 שמח עדן
                 </div>
                 <div class="back">
 
-                    <div  style="font-size: 16px;">
+                    <div style="font-size: 16px;">
                         אני אוהב אותך הכי בעולם!
                         אני מאחל לך שתחייכי ותצחקי מלא,
                         שתגשמי את כל המטרות שלך ומעבר
@@ -220,8 +231,9 @@
 
         </div>
 
-
-
+        <button style="background: none; border: none; " id="toggleButton">
+            🔇
+        </button>
         <div style="margin: 0 auto;" class="slider-container">
 
             <div class="slider" id="slider">
@@ -231,7 +243,7 @@
                 <button id="prevBtn">&#10094; Prev</button>
                 <button id="nextBtn">Next &#10095;</button>
             </div>
-         
+
         </div>
 
 
@@ -272,6 +284,30 @@
     </div>
 
     <script>
+       // music
+        document.addEventListener("DOMContentLoaded", function () {
+            const audioPlayer = document.getElementById("audioPlayer");
+            const toggleButton = document.getElementById("toggleButton");
+
+            // Initial state - paused
+          
+            let isPlaying = false;
+
+
+          
+            // Try to play the audio only on user interaction
+            toggleButton.addEventListener("click", () => {
+                if (isPlaying) {
+                    audioPlayer.pause();
+                    toggleButton.innerHTML = "🔇"; // Change icon to muted
+                } else {
+                    audioPlayer.play();
+                    toggleButton.innerHTML = "🔊"; // Change icon to sound on
+                }
+                isPlaying = !isPlaying; // Toggle the state
+            });
+        });
+
         // Flip card on click
         document.getElementById("flipCard").addEventListener("click", function () {
             this.querySelector(".flip-card").classList.toggle("flipped");
